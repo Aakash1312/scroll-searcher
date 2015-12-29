@@ -19,7 +19,7 @@
   "activationCommands": {
     "atom-workspace": "scroll-searcher:toggle"
   },
-  "repository": "https://github.com/atom/scroll-searcher",
+  "repository": "https://github.com/Aakash1312/scroll-searcher",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0"
