@@ -1,0 +1,27 @@
+// The ui-variables file is provided by base themes provided by Atom.
+//
+// See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
+// for a full listing of what's available.
+@import "ui-variables";
+atom-text-editor .scroll-searcher,
+atom-text-editor::shadow .scroll-searcher {
+-webkit-transform: translateZ(0px);
+width: 10px;
+bottom: 15px;
+position:absolute;
+top:0;
+right:1px;
+opacity:1.0;
+background-color: inherit;
+}
+atom-text-editor .scroll-marker,
+atom-text-editor::shadow .scroll-marker
+{
+position: absolute;;
+border: 1px solid #4de5ff;
+border-top-width: 0px;
+opacity: 1.0;
+-webkit-margin-before:0.0em;
+-webkit-margin-after:0.0em;
+width: inherit;
+}

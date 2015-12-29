@@ -1,0 +1,32 @@
+{
+  "name": "scroll-searcher",
+  "main": "./lib/main",
+  "version": "0.0.0",
+  "description": "Displays find-and-replace markers on scrollbar",
+  "keywords": [
+    "scroll-searcher",
+    "scroll markers",
+    "scrollbar",
+    "find-and-replace"
+  ],
+  "author": "Aakash Praliya <aakashpraliya13@gmail.com>",
+  "contributors": [
+  {
+    "name": "Aakash Praliya",
+    "email": "aakashpraliya13@gmail.com"
+  }
+],
+  "activationCommands": {
+    "atom-workspace": "scroll-searcher:toggle"
+  },
+  "repository": "https://github.com/atom/scroll-searcher",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "underscore-plus": "1.x",
+    "atom-space-pen-views": "2.x",
+    "event-kit": "1.5.x"
+  }
+}
