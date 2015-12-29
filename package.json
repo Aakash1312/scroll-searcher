@@ -1,7 +1,7 @@
 {
   "name": "scroll-searcher",
   "main": "./lib/main",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Displays find-and-replace markers on scrollbar",
   "keywords": [
     "scroll-searcher",
@@ -11,11 +11,11 @@
   ],
   "author": "Aakash Praliya <aakashpraliya13@gmail.com>",
   "contributors": [
-  {
-    "name": "Aakash Praliya",
-    "email": "aakashpraliya13@gmail.com"
-  }
-],
+    {
+      "name": "Aakash Praliya",
+      "email": "aakashpraliya13@gmail.com"
+    }
+  ],
   "activationCommands": {
     "atom-workspace": "scroll-searcher:toggle"
   },
