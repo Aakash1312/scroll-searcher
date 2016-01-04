@@ -1,6 +1,7 @@
 ScrollSearch = require './scroll-searcher-view'
 ScrollMarker = require './scroll-marker'
 {CompositeDisposable, Emitter} = require 'event-kit'
+{TextEditor} = require 'atom'
 
 class Main
   editor: null
@@ -61,7 +62,7 @@ class Main
 
   markOnHeightUpdate: =>
     if @editor?
-      if atom.workspace.isTextEditor(@editor)
+      if @editor instanceof TextEditor
         if @editor.displayBuffer.height != @previousHeight
           @previousHeight = @editor.displayBuffer.height
           @scrollMarker.updateMarkers()
@@ -70,7 +71,7 @@ class Main
 
   markOnEditorChange: (editor) =>
     @editor = editor
-    if atom.workspace.isTextEditor(@editor)
+    if @editor instanceof TextEditor
       @model = atom.packages.getActivePackage('find-and-replace')
       if @model
         @scrollMarker.updateModel(@model)
@@ -79,7 +80,7 @@ class Main
       return
 
   on: (editor) =>
-    if atom.workspace.isTextEditor(editor)
+    if editor instanceof TextEditor
       if @scrollSearcherExists(editor)
         @subscriptions.add atom.views.getView(editor).component.presenter.onDidUpdateState(@markOnHeightUpdate.bind(this))
         scrollSearch = new ScrollSearch(@scrollMarker,this)
