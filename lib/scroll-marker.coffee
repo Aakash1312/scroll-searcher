@@ -1,11 +1,12 @@
 ScrollLine = require './scroll-line'
+ScrollSearch = require './scroll-searcher-view'
 {CompositeDisposable, Emitter} = require 'event-kit'
 module.exports =
 class ScrollMarker
   editor: null
   model : null
   scrollHeight: null
-  constructor: (argModel) ->
+  constructor: (argModel,@main) ->
     @markers = {}
     @subscriptions = new CompositeDisposable
     @emitter = new Emitter
@@ -43,7 +44,18 @@ class ScrollMarker
       @markers[scrollMarker] = 1
     else
       @markers[scrollMarker] = @markers[scrollMarker] + 1
+    @scrollView = atom.views.getView(@editor).rootElement?.querySelector('.scroll-searcher')
     if @scrollView
+      lineClass = new ScrollLine(scrollMarker, @markers,marker, this)
+      line = lineClass.getElement()
+      @scrollView.appendChild(line)
+    else
+      @scrollClass = new ScrollSearch(@main)
+      @scrollView = @scrollClass.getElement()
+      @editorView = atom.views.getView(@editor).component.rootElement?.firstChild
+      @editorView.appendChild(@scrollClass.getElement())
+      verticalScrollbar = atom.views.getView(@editor).component.rootElement?.querySelector('.vertical-scrollbar')
+      verticalScrollbar.style.opacity = "0.65"
       lineClass = new ScrollLine(scrollMarker, @markers,marker, this)
       line = lineClass.getElement()
       @scrollView.appendChild(line)
@@ -67,5 +79,14 @@ class ScrollMarker
         @markers[scrollMarker] = 1;
       lineClass = new ScrollLine(scrollMarker, @markers,marker,this)
       line = lineClass.getElement()
-      @scrollView.appendChild(line)
+      if @scrollView
+        @scrollView.appendChild(line)
+      else
+        @scrollClass = new ScrollSearch(@main)
+        @scrollView = @scrollClass.getElement()
+        @editorView = atom.views.getView(@editor).component.rootElement?.firstChild
+        verticalScrollbar = atom.views.getView(@editor).component.rootElement?.querySelector('.vertical-scrollbar')
+        verticalScrollbar.style.opacity = "0.65"
+        @editorView.appendChild(@scrollClass.getElement())
+        @scrollView.appendChild(line)
     @emitter.emit 'did-update-markers'

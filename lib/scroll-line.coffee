@@ -6,6 +6,8 @@ class ScrollLine
     @domNode = document.createElement('div')
     @domNode.classList.add "scroll-marker"
     @domNode.style.marginTop = "#{margin}px"
+    @domNode.style.borderColor = atom.config.get('scroll-searcher.color').toHexString()
+    @domNode.style.borderTopWidth = "#{atom.config.get('scroll-searcher.size') - 1}px"
     @subscriptions = new CompositeDisposable
     @subscriptions.add @marker.onDidDestroy(@destroy.bind(this))
     @subscriptions.add @marker.onDidChange(@change.bind(this))
