@@ -74,14 +74,11 @@ class Main
       @model = atom.packages.getActivePackage('find-and-replace')
       if @model
         @scrollMarker = new ScrollMarker(@model,this)
-<<<<<<< HEAD
         atom.config.observe 'scroll-searcher.findAndReplace', (value) =>
           if value
             @show()
           else
             @hide()
-=======
->>>>>>> 16ba1b82b3b28e7884240110a13378e74d0e1973
       else
         return
       @subscriptions.add atom.workspace.observePaneItems(@on)
