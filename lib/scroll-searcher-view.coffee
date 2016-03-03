@@ -2,8 +2,7 @@
 module.exports =
 class ScrollSearch
 
-  constructor: (scrollMarker, @main) ->
-    @scrollSearchers = scrollMarker
+  constructor: (@main) ->
     @domNode = document.createElement('div')
     @domNode.classList.add "scroll-searcher"
     @subscriptions = new CompositeDisposable

@@ -38,7 +38,7 @@ class Main
     if @activated
       @model = atom.packages.getActivePackage('find-and-replace')
       if @model
-        @scrollMarker = new ScrollMarker(@model)
+        @scrollMarker = new ScrollMarker(@model,this)
       else
         return
       @subscriptions.add atom.workspace.observePaneItems(@on)
@@ -83,7 +83,7 @@ class Main
     if editor instanceof TextEditor
       if @scrollSearcherExists(editor)
         @subscriptions.add atom.views.getView(editor).component.presenter.onDidUpdateState(@markOnHeightUpdate.bind(this))
-        scrollSearch = new ScrollSearch(@scrollMarker,this)
+        scrollSearch = new ScrollSearch(this)
         @editorView = atom.views.getView(editor).component.rootElement?.firstChild
         @editorView.appendChild(scrollSearch.getElement())
         verticalScrollbar = atom.views.getView(editor).component.rootElement?.querySelector('.vertical-scrollbar')
