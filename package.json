@@ -1,7 +1,7 @@
 {
   "name": "scroll-searcher",
   "main": "./lib/main",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Displays find-and-replace markers on scrollbar",
   "keywords": [
     "scroll-searcher",
