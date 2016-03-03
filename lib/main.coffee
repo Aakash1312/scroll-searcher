@@ -12,18 +12,14 @@ class Main
   previousScrollHeight: null
   activated: false
   config:
-    # focusEditorAfterSearch:
-    #   type: 'boolean'
-    #   default: false
-    #   description: 'Focus the editor and select the next match when a file search is executed. If no matches are found, the editor will not be focused.'
     color:
       type: 'color'
-      default: 'red'
+      default: '#4de5ff'
       title: 'Set the color of scroll-searchers'
       description: 'Pick a color for scroll-searchers from the color box'
     size:
       type: 'integer'
-      default:0
+      default:1
       enum: [1, 2, 3]
       title: 'Set the size of scroll-searchers'
       description: 'Pick a size for scroll-searchers from the drop-down list'
@@ -36,9 +32,10 @@ class Main
       description: 'Set the scrollbar opacity for better visibility'
     findAndReplace:
       type: 'boolean'
-      default : true
-      title: 'Remove markers on hiding find-and-replace bar'
-      description : 'Set this property to true if you want to remove the markers when there is no find-and-replace pane'
+      default : false
+      title: 'Retain markers on hiding find-and-replace bar'
+      description : 'Set this property to true if you want to retain the markers after closing the find-and-replace pane'
+
   activate: (state) ->
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @emitter = new Emitter
@@ -53,7 +50,9 @@ class Main
       'find-and-replace:show': => @show()
 
   hide: =>
-    @emitter.emit 'did-hide'
+    if not atom.config.get('scroll-searcher.findAndReplace')
+      if not @model.mainModule.findPanel.visible
+        @emitter.emit 'did-hide'
 
   show: =>
     @emitter.emit 'did-show'
@@ -75,6 +74,11 @@ class Main
       @model = atom.packages.getActivePackage('find-and-replace')
       if @model
         @scrollMarker = new ScrollMarker(@model,this)
+        atom.config.observe 'scroll-searcher.findAndReplace', (value) =>
+          if value
+            @show()
+          else
+            @hide()
       else
         return
       @subscriptions.add atom.workspace.observePaneItems(@on)

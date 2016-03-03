@@ -39,7 +39,14 @@ class ScrollMarker
     displayHeight = @editor.displayBuffer.height
     lineHeight = @editor.displayBuffer.getLineHeightInPixels()
     row = marker.getBufferRange().start.row
-    scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight)
+    if atom.config.get('scroll-searcher.size') is 1
+      scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight)
+    else
+      if atom.config.get('scroll-searcher.size') is 2
+        scrollMarker = Math.floor((row*lineHeight*displayHeight)/@scrollHeight)
+      else
+        scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight) - 1
+      # body...
     if not @markers[scrollMarker]
       @markers[scrollMarker] = 1
     else
@@ -72,7 +79,15 @@ class ScrollMarker
     # @scrollView.innerHTML = ''
     for marker in updatedMarkers
       row = marker.getBufferRange().start.row
-      scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight)
+      # scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight)
+      if atom.config.get('scroll-searcher.size') is 1
+        scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight)
+      else
+        if atom.config.get('scroll-searcher.size') is 2
+          scrollMarker = Math.floor((row*lineHeight*displayHeight)/@scrollHeight)
+        else
+          scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight) - 1
+
       if @markers[scrollMarker]
         @markers[scrollMarker] = @markers[scrollMarker] + 1
       else
