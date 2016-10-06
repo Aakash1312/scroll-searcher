@@ -12,6 +12,7 @@ class ScrollMarker
     @emitter = new Emitter
     @model = argModel
     @editor = atom.workspace.getActiveTextEditor()
+    @hasApi = parseFloat(atom.packages.getLoadedPackage('find-and-replace').metadata.version) >= 0.194
 
   onDidDestroy: (callback) ->
     @emitter.on 'did-destroy', callback
@@ -71,12 +72,22 @@ class ScrollMarker
     @emitter.emit 'did-destroy'
     @editor = atom.workspace.getActiveTextEditor()
     @markers = {}
-    updatedMarkers = @model.mainModule.findModel.resultsMarkerLayer.findMarkers({class: 'find-result'})
+    updatedMarkers = {}
+    # attributes = { class: 'find-and-replace' }
+    # updatedMarkers = @editor.findMarkers(class: 'find-result');
+    if(@hasApi)
+      atom.packages.serviceHub.consume 'find-and-replace', '0.0.1', (fnr) =>
+        if(fnr)
+          @layer = fnr.resultsMarkerLayerForTextEditor(@editor);
+          updatedMarkers = @layer.findMarkers();
+        else
+          updatedMarkers = @model.mainModule.findModel.resultsMarkerLayer.findMarkers({class: 'find-result'})
     @scrollHeight = @editor.getScrollHeight()
     displayHeight = @editor.displayBuffer.height
     lineHeight = @editor.displayBuffer.getLineHeightInPixels()
     @scrollView = atom.views.getView(@editor).rootElement?.querySelector('.scroll-searcher')
     # @scrollView.innerHTML = ''
+    # console.log updatedMarkers
     for marker in updatedMarkers
       row = marker.getScreenRange().start.row
       # scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight)

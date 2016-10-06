@@ -48,6 +48,7 @@ class Main
       'core:close': => @deactivate()
       'core:cancel': => @hide()
       'find-and-replace:show': => @show()
+    @toggle()
 
   hide: =>
     if not atom.config.get('scroll-searcher.findAndReplace')

@@ -5,7 +5,7 @@ class ScrollLine
   constructor: (@margin, @markers, @marker, @scrollMarker) ->
     @domNode = document.createElement('div')
     @domNode.classList.add "scroll-marker"
-    @domNode.style.marginTop = "#{margin}px"
+    @domNode.style.marginTop = "#{@margin}px"
     @domNode.style.borderColor = atom.config.get('scroll-searcher.color').toHexString()
     @domNode.style.borderTopWidth = "#{atom.config.get('scroll-searcher.size') - 1}px"
     @subscriptions = new CompositeDisposable
@@ -29,8 +29,14 @@ class ScrollLine
       @scrollMarker.createMarker(@marker)
 
   completeDestruction: =>
+    console.log "here it was"
     @domNode.remove()
     @subscriptions.dispose()
-
+    # editor = atom.workspace.getActiveTextEditor();
+    # scrollHeight = @editor.getScrollHeight()
+    # displayHeight = @editor.displayBuffer.height
+    # lineHeight = @editor.displayBuffer.getLineHeightInPixels()
+    # @domNode.style.marginTop = Math.round(((@domNode.style.marginTop)*lineHeight*displayHeight)/@scrollHeight)
+    # console.log @domNode
   getElement: ->
     @domNode
