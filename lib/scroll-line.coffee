@@ -5,15 +5,18 @@ class ScrollLine
   constructor: (@margin, @markers, @marker, @scrollMarker) ->
     @domNode = document.createElement('div')
     @domNode.classList.add "scroll-marker"
+    # Set the top margin, border color and border width of the scroll-bar markers according to the configuration settings
     @domNode.style.marginTop = "#{@margin}px"
     @domNode.style.borderColor = atom.config.get('scroll-searcher.color').toHexString()
     @domNode.style.borderTopWidth = "#{atom.config.get('scroll-searcher.size') - 1}px"
+    # Add event subscriptions to observe changes in editor window
     @subscriptions = new CompositeDisposable
     @subscriptions.add @marker.onDidDestroy(@destroy.bind(this))
     @subscriptions.add @marker.onDidChange(@change.bind(this))
     @subscriptions.add @scrollMarker.onDidDestroy(@completeDestruction.bind(this))
-  # Tear down any state and detach
+
   destroy: =>
+    # Remove domnode and dispose off subscriptions
     @domNode.remove()
     @subscriptions.dispose()
     @markers[@margin] = @markers[@margin] - 1
@@ -29,14 +32,7 @@ class ScrollLine
       @scrollMarker.createMarker(@marker)
 
   completeDestruction: =>
-    console.log "here it was"
     @domNode.remove()
     @subscriptions.dispose()
-    # editor = atom.workspace.getActiveTextEditor();
-    # scrollHeight = @editor.getScrollHeight()
-    # displayHeight = @editor.displayBuffer.height
-    # lineHeight = @editor.displayBuffer.getLineHeightInPixels()
-    # @domNode.style.marginTop = Math.round(((@domNode.style.marginTop)*lineHeight*displayHeight)/@scrollHeight)
-    # console.log @domNode
   getElement: ->
     @domNode

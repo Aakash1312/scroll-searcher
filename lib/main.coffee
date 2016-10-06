@@ -11,6 +11,7 @@ class Main
   previousHeight: null
   previousScrollHeight: null
   activated: false
+  # configuration settings. It includes color, size and opacity of scroll searchers.
   config:
     color:
       type: 'color'
@@ -37,12 +38,11 @@ class Main
       description : 'Set this property to true if you want to retain the markers after closing the find-and-replace pane'
 
   activate: (state) ->
-    # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
+    #Activate the package. The package is automatically activated once the text editor is opened
     @emitter = new Emitter
     @previousHeight = 0
     @subs = new CompositeDisposable
     @subscriptions = new CompositeDisposable
-    # Register command that toggles this view
     @subs.add atom.commands.add 'atom-workspace',
       'scroll-searcher:toggle': => @toggle()
       'core:close': => @deactivate()
@@ -51,6 +51,7 @@ class Main
     @toggle()
 
   hide: =>
+    # emits hide signal when find-and-replace bar is hidden
     if not atom.config.get('scroll-searcher.findAndReplace')
       if not @model.mainModule.findPanel.visible
         @emitter.emit 'did-hide'
@@ -72,9 +73,12 @@ class Main
 
   initialize: ->
     if @activated
+      # Check for active find-and-replace package
       @model = atom.packages.getActivePackage('find-and-replace')
       if @model
+        # Initiate an new scroll-marker class if an active find-and-replace model is found
         @scrollMarker = new ScrollMarker(@model,this)
+        # Toggle with the view of find-and-replace
         atom.config.observe 'scroll-searcher.findAndReplace', (value) =>
           if value
             @show()
@@ -82,6 +86,7 @@ class Main
             @hide()
       else
         return
+      # Observe change in active text editor window
       @subscriptions.add atom.workspace.observePaneItems(@on)
       @subscriptions.add atom.workspace.observeActivePaneItem(@markOnEditorChange)
 
@@ -107,15 +112,18 @@ class Main
   onDidHide: (callback) ->
     @emitter.on 'did-hide', callback
 
+  # Change scroll searchers on change in height of editor
   markOnHeightUpdate: =>
     if @editor?
       if @editor instanceof TextEditor
+        # If old height does not match new height than update markers
         if @editor.displayBuffer.height != @previousHeight
           @previousHeight = @editor.displayBuffer.height
           @scrollMarker.updateMarkers()
       else
         return
 
+  # Update scroll-searchers if current editor window is switched with another
   markOnEditorChange: (editor) =>
     @editor = editor
     if @editor instanceof TextEditor
@@ -123,6 +131,7 @@ class Main
       if @model
         @scrollMarker.updateModel(@model)
         @scrollMarker.updateMarkers()
+        # Get the scrollbar domnode of new editor window
         @verticalScrollbar = atom.views.getView(editor).component.rootElement?.querySelector('.vertical-scrollbar')
         if @verticalScrollbar
           @verticalScrollbar.style.opacity = "0.#{atom.config.get('scroll-searcher.scrOpacity')}"
@@ -131,6 +140,7 @@ class Main
 
   on: (editor) =>
     if editor instanceof TextEditor
+      # Initiate scroll-searcher class if it doesn't exist already
       if @scrollSearcherExists(editor)
         @subscriptions.add atom.views.getView(editor).component.presenter.onDidUpdateState(@markOnHeightUpdate.bind(this))
         scrollSearch = new ScrollSearch(this)
