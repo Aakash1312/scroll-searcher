@@ -86,37 +86,69 @@ class ScrollMarker
         if(fnr)
           @layer = fnr.resultsMarkerLayerForTextEditor(@editor);
           updatedMarkers = @layer.findMarkers();
+          @scrollHeight = @editor.getScrollHeight()
+          displayHeight = @editor.displayBuffer.height
+          lineHeight = @editor.displayBuffer.getLineHeightInPixels()
+          @scrollView = atom.views.getView(@editor).rootElement?.querySelector('.scroll-searcher')
+          for marker in updatedMarkers
+            row = marker.getScreenRange().start.row
+            if atom.config.get('scroll-searcher.size') is 1
+              scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight)
+            else
+              if atom.config.get('scroll-searcher.size') is 2
+                scrollMarker = Math.floor((row*lineHeight*displayHeight)/@scrollHeight)
+              else
+                scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight) - 1
+
+            if @markers[scrollMarker]
+              @markers[scrollMarker] = @markers[scrollMarker] + 1
+            else
+              @markers[scrollMarker] = 1;
+            lineClass = new ScrollLine(scrollMarker, @markers,marker,this)
+            line = lineClass.getElement()
+            if @scrollView
+              @scrollView.appendChild(line)
+            else
+              @scrollClass = new ScrollSearch(@main)
+              @scrollView = @scrollClass.getElement()
+              @editorView = atom.views.getView(@editor).component.rootElement?.firstChild
+              verticalScrollbar = atom.views.getView(@editor).component.rootElement?.querySelector('.vertical-scrollbar')
+              verticalScrollbar.style.opacity = "0.65"
+              @editorView.appendChild(@scrollClass.getElement())
+              @scrollView.appendChild(line)
+          # notify that markers have been updated
+          @emitter.emit 'did-update-markers'
         else
           updatedMarkers = @model.mainModule.findModel.resultsMarkerLayer.findMarkers({class: 'find-result'})
-    @scrollHeight = @editor.getScrollHeight()
-    displayHeight = @editor.displayBuffer.height
-    lineHeight = @editor.displayBuffer.getLineHeightInPixels()
-    @scrollView = atom.views.getView(@editor).rootElement?.querySelector('.scroll-searcher')
-    for marker in updatedMarkers
-      row = marker.getScreenRange().start.row
-      if atom.config.get('scroll-searcher.size') is 1
-        scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight)
-      else
-        if atom.config.get('scroll-searcher.size') is 2
-          scrollMarker = Math.floor((row*lineHeight*displayHeight)/@scrollHeight)
-        else
-          scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight) - 1
+          @scrollHeight = @editor.getScrollHeight()
+          displayHeight = @editor.displayBuffer.height
+          lineHeight = @editor.displayBuffer.getLineHeightInPixels()
+          @scrollView = atom.views.getView(@editor).rootElement?.querySelector('.scroll-searcher')
+          for marker in updatedMarkers
+            row = marker.getScreenRange().start.row
+            if atom.config.get('scroll-searcher.size') is 1
+              scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight)
+            else
+              if atom.config.get('scroll-searcher.size') is 2
+                scrollMarker = Math.floor((row*lineHeight*displayHeight)/@scrollHeight)
+              else
+                scrollMarker = Math.round((row*lineHeight*displayHeight)/@scrollHeight) - 1
 
-      if @markers[scrollMarker]
-        @markers[scrollMarker] = @markers[scrollMarker] + 1
-      else
-        @markers[scrollMarker] = 1;
-      lineClass = new ScrollLine(scrollMarker, @markers,marker,this)
-      line = lineClass.getElement()
-      if @scrollView
-        @scrollView.appendChild(line)
-      else
-        @scrollClass = new ScrollSearch(@main)
-        @scrollView = @scrollClass.getElement()
-        @editorView = atom.views.getView(@editor).component.rootElement?.firstChild
-        verticalScrollbar = atom.views.getView(@editor).component.rootElement?.querySelector('.vertical-scrollbar')
-        verticalScrollbar.style.opacity = "0.65"
-        @editorView.appendChild(@scrollClass.getElement())
-        @scrollView.appendChild(line)
-    # notify that markers have been updated
-    @emitter.emit 'did-update-markers'
+            if @markers[scrollMarker]
+              @markers[scrollMarker] = @markers[scrollMarker] + 1
+            else
+              @markers[scrollMarker] = 1;
+            lineClass = new ScrollLine(scrollMarker, @markers,marker,this)
+            line = lineClass.getElement()
+            if @scrollView
+              @scrollView.appendChild(line)
+            else
+              @scrollClass = new ScrollSearch(@main)
+              @scrollView = @scrollClass.getElement()
+              @editorView = atom.views.getView(@editor).component.rootElement?.firstChild
+              verticalScrollbar = atom.views.getView(@editor).component.rootElement?.querySelector('.vertical-scrollbar')
+              verticalScrollbar.style.opacity = "0.65"
+              @editorView.appendChild(@scrollClass.getElement())
+              @scrollView.appendChild(line)
+          # notify that markers have been updated
+          @emitter.emit 'did-update-markers'
