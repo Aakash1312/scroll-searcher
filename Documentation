@@ -1,0 +1,30 @@
+Overview:
+Scroll-Searcher package is made to make the searching for text in text-editors easier. No modern text-editors (including gedit, sublime) use scrollbar as a means to display visual information.
+Scrollbars can be very helpful in showing useful data. This is because the entire stretch of document is mapped to scrollbar. Therefore scrollbar can be very helpul to visually locate important parts of document. It can be very helpful in large documents.
+
+Scroll-Searcher package given an eagle-eye view of text search results in atom by creating markers on scrollbar. The package gives options to adjust the size, color and transparency of these markers.
+
+Installation:
+
+In order to install scroll-searcher, we first need to install atom text editor.
+Atom can be installed from here:
+https://atom.io/
+
+or it can be installed from source:
+https://github.com/atom/atom
+
+After installing atom, you can manually install the scroll-searcher package by going to
+Packages > Settings View > Install Packages/Themes
+
+After this search for 'scroll-searcher' and install the package
+
+You can also install the package using the command:
+
+apm install scroll-searcher
+
+
+Future Scope:
+
+As mentioned earlier, scrollbar can be used to display a lot of useful information. Apart from find-and-replace results, we can also use scrollbar to bookmark certain text in document.
+It is common in programming that sometimes we have to look at the two different pieces of code in the same file again and again. We have to keep scrolling up and down and search for the desired piece of code several times. One solution to this problem is to open the same file in two different editors. But other solution is  to bookmark different pieces of document on scrollbar. This way we can quickly scroll to the desired piece of code.
+Hence, there are several ways in which scrollbar can be used and modern text editors should implement these features.
