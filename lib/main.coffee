@@ -69,9 +69,9 @@ class Main
 
   isPackageActive: (findPackage) =>
     if findPackage.name == 'find-and-replace'
-      @initialize()
+      @initializePackage()
 
-  initialize: ->
+  initializePackage: ->
     if @activated
       # Check for active find-and-replace package
       @model = atom.packages.getActivePackage('find-and-replace')
@@ -95,7 +95,7 @@ class Main
       @activated = true
       @subscriptions = new CompositeDisposable
       @subscriptions.add atom.packages.onDidActivatePackage(@isPackageActive)
-      @initialize()
+      @initializePackage()
     else
       @activated = false
       @subscriptions.dispose()
