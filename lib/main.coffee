@@ -53,7 +53,7 @@ class Main
   hide: =>
     # emits hide signal when find-and-replace bar is hidden
     if not atom.config.get('scroll-searcher.findAndReplace')
-      if not @model.mainModule.findPanel.visible
+      if not @model?.mainModule.findPanel.visible
         @emitter.emit 'did-hide'
 
   show: =>
@@ -132,7 +132,7 @@ class Main
         @scrollMarker.updateModel(@model)
         @scrollMarker.updateMarkers()
         # Get the scrollbar domnode of new editor window
-        @verticalScrollbar = atom.views.getView(editor).component.rootElement?.querySelector('.vertical-scrollbar')
+        @verticalScrollbar = atom.views.getView(editor).querySelector('.vertical-scrollbar')
         if @verticalScrollbar
           @verticalScrollbar.style.opacity = "0.#{atom.config.get('scroll-searcher.scrOpacity')}"
     else
@@ -144,14 +144,14 @@ class Main
       if @scrollSearcherExists(editor)
         @subscriptions.add atom.views.getView(editor).component.presenter.onDidUpdateState(@markOnHeightUpdate.bind(this))
         scrollSearch = new ScrollSearch(this)
-        @editorView = atom.views.getView(editor).component.rootElement?.firstChild
+        @editorView = atom.views.getView(editor).component['domNodeValue']
         @editorView.appendChild(scrollSearch.getElement())
-        @verticalScrollbar = atom.views.getView(editor).component.rootElement?.querySelector('.vertical-scrollbar')
+        @verticalScrollbar = @editorView.querySelector('.vertical-scrollbar')
         @verticalScrollbar.style.opacity = "0.65"
 
 
   scrollSearcherExists: (editor) ->
-    @scrollView = atom.views.getView(editor).rootElement?.querySelector('.scroll-searcher')
+    @scrollView = atom.views.getView(editor).querySelector('.scroll-searcher')
     if @scrollView?
       return false
     else

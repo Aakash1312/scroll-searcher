@@ -37,7 +37,7 @@ class ScrollMarker
   # Create an new scroll-marker for every newly formed find-and-replace marker
   createMarker: (marker) =>
     @editor = atom.workspace.getActiveTextEditor()
-    newScrollHeight = @editor.getScrollHeight()
+    newScrollHeight = atom.views.getView(@editor).getScrollHeight()
     if newScrollHeight != @scrollHeight
       @updateMarkers()
       return
@@ -86,7 +86,7 @@ class ScrollMarker
         if(fnr)
           @layer = fnr.resultsMarkerLayerForTextEditor(@editor);
           updatedMarkers = @layer.findMarkers();
-          @scrollHeight = @editor.getScrollHeight()
+          @scrollHeight = atom.views.getView(@editor).getScrollHeight()
           displayHeight = @editor.displayBuffer.height
           lineHeight = @editor.displayBuffer.getLineHeightInPixels()
           @scrollView = atom.views.getView(@editor).rootElement?.querySelector('.scroll-searcher')
@@ -120,7 +120,7 @@ class ScrollMarker
           @emitter.emit 'did-update-markers'
         else
           updatedMarkers = @model.mainModule.findModel.resultsMarkerLayer.findMarkers({class: 'find-result'})
-          @scrollHeight = @editor.getScrollHeight()
+          @scrollHeight = atom.views.getView(@editor).getScrollHeight()
           displayHeight = @editor.displayBuffer.height
           lineHeight = @editor.displayBuffer.getLineHeightInPixels()
           @scrollView = atom.views.getView(@editor).rootElement?.querySelector('.scroll-searcher')
