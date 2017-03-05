@@ -56,7 +56,7 @@ class ScrollMarker
       @markers[scrollMarker] = 1
     else
       @markers[scrollMarker] = @markers[scrollMarker] + 1
-    @scrollView = atom.views.getView(@editor).rootElement?.querySelector('.scroll-searcher')
+    @scrollView = atom.views.getView(@editor).component.domNodeValue.querySelector('.scroll-searcher')
     if @scrollView
       # Create a new scroll line with the position given by scrollMarker variable
       lineClass = new ScrollLine(scrollMarker, @markers,marker, this)
@@ -66,9 +66,9 @@ class ScrollMarker
       # If scroll-searcher class doesn't exist, then create a new class (This can be the case when a new editor window is opened or switched to)
       @scrollClass = new ScrollSearch(@main)
       @scrollView = @scrollClass.getElement()
-      @editorView = atom.views.getView(@editor).component.rootElement?.firstChild
+      @editorView = atom.views.getView(@editor).component.domNodeValue
       @editorView.appendChild(@scrollClass.getElement())
-      verticalScrollbar = atom.views.getView(@editor).component.rootElement?.querySelector('.vertical-scrollbar')
+      verticalScrollbar = atom.views.getView(@editor).component.domNodeValue.querySelector('.vertical-scrollbar')
       verticalScrollbar.style.opacity = "0.65"
       lineClass = new ScrollLine(scrollMarker, @markers,marker, this)
       line = lineClass.getElement()
@@ -89,7 +89,7 @@ class ScrollMarker
           @scrollHeight = atom.views.getView(@editor).getScrollHeight()
           displayHeight = @editor.displayBuffer.height
           lineHeight = @editor.displayBuffer.getLineHeightInPixels()
-          @scrollView = atom.views.getView(@editor).rootElement?.querySelector('.scroll-searcher')
+          @scrollView = atom.views.getView(@editor).component.domNodeValue.querySelector('.scroll-searcher')
           for marker in updatedMarkers
             row = marker.getScreenRange().start.row
             if atom.config.get('scroll-searcher.size') is 1
@@ -111,8 +111,8 @@ class ScrollMarker
             else
               @scrollClass = new ScrollSearch(@main)
               @scrollView = @scrollClass.getElement()
-              @editorView = atom.views.getView(@editor).component.rootElement?.firstChild
-              verticalScrollbar = atom.views.getView(@editor).component.rootElement?.querySelector('.vertical-scrollbar')
+              @editorView = atom.views.getView(@editor).component.domNodeValue
+              verticalScrollbar = atom.views.getView(@editor).component.domNodeValue.querySelector('.vertical-scrollbar')
               verticalScrollbar.style.opacity = "0.65"
               @editorView.appendChild(@scrollClass.getElement())
               @scrollView.appendChild(line)
@@ -123,7 +123,7 @@ class ScrollMarker
           @scrollHeight = atom.views.getView(@editor).getScrollHeight()
           displayHeight = @editor.displayBuffer.height
           lineHeight = @editor.displayBuffer.getLineHeightInPixels()
-          @scrollView = atom.views.getView(@editor).rootElement?.querySelector('.scroll-searcher')
+          @scrollView = atom.views.getView(@editor).component.domNodeValue.querySelector('.scroll-searcher')
           for marker in updatedMarkers
             row = marker.getScreenRange().start.row
             if atom.config.get('scroll-searcher.size') is 1
@@ -145,8 +145,8 @@ class ScrollMarker
             else
               @scrollClass = new ScrollSearch(@main)
               @scrollView = @scrollClass.getElement()
-              @editorView = atom.views.getView(@editor).component.rootElement?.firstChild
-              verticalScrollbar = atom.views.getView(@editor).component.rootElement?.querySelector('.vertical-scrollbar')
+              @editorView = atom.views.getView(@editor).component.domNodeValue
+              verticalScrollbar = atom.views.getView(@editor).component.domNodeValue.querySelector('.vertical-scrollbar')
               verticalScrollbar.style.opacity = "0.65"
               @editorView.appendChild(@scrollClass.getElement())
               @scrollView.appendChild(line)
